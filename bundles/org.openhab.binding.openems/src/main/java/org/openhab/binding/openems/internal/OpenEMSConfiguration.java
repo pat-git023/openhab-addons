@@ -26,6 +26,7 @@ public class OpenEMSConfiguration {
      * Sample configuration parameters. Replace with your own.
      */
     public String hostname = "";
+    public String username = "x";
     public String password = "";
     public int refreshInterval = 600;
 }

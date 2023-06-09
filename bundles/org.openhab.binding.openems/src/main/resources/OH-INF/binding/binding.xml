@@ -5,5 +5,6 @@
 
 	<name>OpenEMS Binding</name>
 	<description>This is the binding for OpenEMS.</description>
+	<author>Patrick Gell</author>
 
 </binding:binding>

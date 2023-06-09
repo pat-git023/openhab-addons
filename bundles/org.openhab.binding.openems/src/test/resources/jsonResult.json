@@ -1,0 +1,386 @@
+[
+  {
+    "address": "_sum/_PropertyCycleTime",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "",
+    "value": 1000
+  },
+  {
+    "address": "_sum/GridSellActiveEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": 62
+  },
+  {
+    "address": "_sum/ConsumptionActiveEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": 6878
+  },
+  {
+    "address": "_sum/EssMaxApparentPower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "VA",
+    "value": 10000
+  },
+  {
+    "address": "_sum/ProductionDcActiveEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": 2391
+  },
+  {
+    "address": "_sum/ConsumptionActivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "W",
+    "value": 178
+  },
+  {
+    "address": "_sum/GridMaxActivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "W",
+    "value": 6800
+  },
+  {
+    "address": "_sum/EssCapacity",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": 8800
+  },
+  {
+    "address": "_sum/ConsumptionMaxActivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "W",
+    "value": 16800
+  },
+  {
+    "address": "_sum/EssActiveChargeEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": 283
+  },
+  {
+    "address": "_sum/GridActivePowerL2",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Grid exchange power on phase L2. Negative values for sell-to-grid; positive for buy-from-grid",
+    "unit": "W",
+    "value": 47
+  },
+  {
+    "address": "_sum/GridActivePowerL1",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Grid exchange power on phase L1. Negative values for sell-to-grid; positive for buy-from-grid",
+    "unit": "W",
+    "value": 109
+  },
+  {
+    "address": "_sum/ProductionDcActualPower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Production from DC source",
+    "unit": "W",
+    "value": 0
+  },
+  {
+    "address": "_sum/EssActiveDischargeEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": 3595
+  },
+  {
+    "address": "_sum/ProductionMaxAcActivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "W",
+    "value": null
+  },
+  {
+    "address": "_sum/EssActivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "AC-side power of Energy Storage System. Includes excess DC-PV production for hybrid inverters. Negative values for charge; positive for discharge",
+    "unit": "W",
+    "value": -90
+  },
+  {
+    "address": "_sum/GridMinActivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "W",
+    "value": -900
+  },
+  {
+    "address": "_sum/ProductionActiveEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": 2391
+  },
+  {
+    "address": "_sum/EssSoc",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Range 0..100",
+    "unit": "%",
+    "value": 4
+  },
+  {
+    "address": "_sum/EssDcDischargeEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": 2093
+  },
+  {
+    "address": "_sum/GridBuyActiveEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": 3628
+  },
+  {
+    "address": "_sum/_PropertyIgnoreStateComponents",
+    "type": "STRING",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "",
+    "value": "[\"\"]"
+  },
+  {
+    "address": "_sum/State",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "0:Ok, 1:Info, 2:Warning, 3:Fault",
+    "unit": "",
+    "value": 0
+  },
+  {
+    "address": "_sum/EssReactivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "var",
+    "value": 0
+  },
+  {
+    "address": "_sum/ProductionAcActivePowerL2",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Production from AC source on phase L2",
+    "unit": "W",
+    "value": null
+  },
+  {
+    "address": "_sum/ProductionMaxDcActualPower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "W",
+    "value": 2200
+  },
+  {
+    "address": "_sum/ProductionAcActivePowerL3",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Production from AC source on phase L3",
+    "unit": "W",
+    "value": null
+  },
+  {
+    "address": "_sum/ProductionAcActivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Production from AC source",
+    "unit": "W",
+    "value": null
+  },
+  {
+    "address": "_sum/ProductionAcActivePowerL1",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Production from AC source on phase L1",
+    "unit": "W",
+    "value": null
+  },
+  {
+    "address": "_sum/_PropertyApps",
+    "type": "STRING",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "",
+    "value": "[]"
+  },
+  {
+    "address": "_sum/ProductionActivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Total production; always positive",
+    "unit": "W",
+    "value": 0
+  },
+  {
+    "address": "_sum/_PropertyNetworkConfiguration",
+    "type": "STRING",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "",
+    "value": null
+  },
+  {
+    "address": "_sum/EssDischargePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Actual AC-side battery discharge power of Energy Storage System. Negative values for charge; positive for discharge",
+    "unit": "W",
+    "value": -90
+  },
+  {
+    "address": "_sum/ConsumptionActivePowerL2",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "W",
+    "value": 17
+  },
+  {
+    "address": "_sum/ConsumptionActivePowerL3",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "W",
+    "value": 82
+  },
+  {
+    "address": "_sum/ConsumptionActivePowerL1",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "W",
+    "value": 79
+  },
+  {
+    "address": "_sum/EssActivePowerL3",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "AC-side power of Energy Storage System on phase L3. Includes excess DC-PV production for hybrid inverters. Negative values for charge; positive for discharge",
+    "unit": "W",
+    "value": -30
+  },
+  {
+    "address": "_sum/EssDcChargeEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": 1175
+  },
+  {
+    "address": "_sum/EssActivePowerL2",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "AC-side power of Energy Storage System on phase L2. Includes excess DC-PV production for hybrid inverters. Negative values for charge; positive for discharge",
+    "unit": "W",
+    "value": -30
+  },
+  {
+    "address": "_sum/ProductionMaxActivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "W",
+    "value": 2200
+  },
+  {
+    "address": "_sum/_PropertyKeyForFreeApps",
+    "type": "STRING",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "",
+    "value": "0000-0000-0000-0000"
+  },
+  {
+    "address": "_sum/ProductionAcActiveEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": null
+  },
+  {
+    "address": "_sum/HasIgnoredComponentStates",
+    "type": "BOOLEAN",
+    "accessMode": "RO",
+    "text": "Component Warnings or Faults are being ignored",
+    "unit": "",
+    "value": 0
+  },
+  {
+    "address": "_sum/GridActivePowerL3",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Grid exchange power on phase L3. Negative values for sell-to-grid; positive for buy-from-grid",
+    "unit": "W",
+    "value": 112
+  },
+  {
+    "address": "_sum/GridMode",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "1:On-Grid, 2:Off-Grid",
+    "unit": "",
+    "value": 1
+  },
+  {
+    "address": "_sum/EssActivePowerL1",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "AC-side power of Energy Storage System on phase L1. Includes excess DC-PV production for hybrid inverters. Negative values for charge; positive for discharge",
+    "unit": "W",
+    "value": -30
+  },
+  {
+    "address": "_sum/GridActivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Grid exchange power. Negative values for sell-to-grid; positive for buy-from-grid",
+    "unit": "W",
+    "value": 268
+  },
+  {
+    "address": "_sum/_PropertyUsbConfiguration",
+    "type": "STRING",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "",
+    "value": null
+  }
+]
