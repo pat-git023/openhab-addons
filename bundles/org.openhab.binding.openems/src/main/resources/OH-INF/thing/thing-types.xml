@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="openems"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="openems">
+		<label>OpenEMS</label>
+		<description>Read values from OpenEMS</description>
+
+		<channels>
+			<channel id="sum-GridSellActiveEnergy" typeId="sum-GridSellActiveEnergy"/>
+			<channel id="sum-ConsumptionActiveEnergy" typeId="sum-ConsumptionActiveEnergy"/>
+			<channel id="sum-EssMaxApparentPower" typeId="sum-EssMaxApparentPower"/>
+			<channel id="sum-ProductionDcActiveEnergy" typeId="sum-ProductionDcActiveEnergy"/>
+			<channel id="sum-ConsumptionActivePower" typeId="sum-ConsumptionActivePower"/>
+			<channel id="sum-GridMaxActivePower" typeId="sum-GridMaxActivePower"/>
+			<channel id="sum-EssCapacity" typeId="sum-EssCapacity"/>
+			<channel id="sum-ConsumptionMaxActivePower" typeId="sum-ConsumptionMaxActivePower"/>
+			<channel id="sum-EssActiveChargeEnergy" typeId="sum-EssActiveChargeEnergy"/>
+			<channel id="sum-GridActivePowerL2" typeId="sum-GridActivePowerL2"/>
+			<channel id="sum-GridActivePowerL1" typeId="sum-GridActivePowerL1"/>
+			<channel id="sum-ProductionDcActualPower" typeId="sum-ProductionDcActualPower"/>
+			<channel id="sum-EssActiveDischargeEnergy" typeId="sum-EssActiveDischargeEnergy"/>
+			<channel id="sum-EssActivePower" typeId="sum-EssActivePower"/>
+			<channel id="sum-GridMinActivePower" typeId="sum-GridMinActivePower"/>
+			<channel id="sum-ProductionActiveEnergy" typeId="sum-ProductionActiveEnergy"/>
+			<channel id="sum-EssSoc" typeId="sum-EssSoc"/>
+			<channel id="sum-EssDcDischargeEnergy" typeId="sum-EssDcDischargeEnergy"/>
+			<channel id="sum-GridBuyActiveEnergy" typeId="sum-GridBuyActiveEnergy"/>
+			<channel id="sum-State" typeId="sum-State"/>
+			<channel id="sum-EssReactivePower" typeId="sum-EssReactivePower"/>
+			<channel id="sum-ProductionMaxDcActualPower" typeId="sum-ProductionMaxDcActualPower"/>
+			<channel id="sum-ProductionActivePower" typeId="sum-ProductionActivePower"/>
+			<channel id="sum-EssDischargePower" typeId="sum-EssDischargePower"/>
+			<channel id="sum-ConsumptionActivePowerL2" typeId="sum-ConsumptionActivePowerL2"/>
+			<channel id="sum-ConsumptionActivePowerL3" typeId="sum-ConsumptionActivePowerL3"/>
+			<channel id="sum-ConsumptionActivePowerL1" typeId="sum-ConsumptionActivePowerL1"/>
+			<channel id="sum-EssActivePowerL3" typeId="sum-EssActivePowerL3"/>
+			<channel id="sum-EssDcChargeEnergy" typeId="sum-EssDcChargeEnergy"/>
+			<channel id="sum-EssActivePowerL2" typeId="sum-EssActivePowerL2"/>
+			<channel id="sum-ProductionMaxActivePower" typeId="sum-ProductionMaxActivePower"/>
+			<channel id="sum-GridActivePowerL3" typeId="sum-GridActivePowerL3"/>
+			<channel id="sum-GridMode" typeId="sum-GridMode"/>
+			<channel id="sum-EssActivePowerL1" typeId="sum-EssActivePowerL1"/>
+			<channel id="sum-GridActivePower" typeId="sum-GridActivePower"/>
+			<channel id="charger0-ActualEnergy" typeId="charger0-ActualEnergy"/>
+			<channel id="charger1-ActualEnergy" typeId="charger1-ActualEnergy"/>
+			<channel id="meta-Version" typeId="meta-Version"/>
+
+		</channels>
+
+		<config-description>
+			<parameter name="hostname" type="text" required="true">
+				<context>network-address</context>
+				<label>Hostname</label>
+				<description>Hostname or IP address of the OpenEMS REST Api</description>
+			</parameter>
+			<parameter name="username" type="text" required="false">
+				<label>Username</label>
+				<description>Username to access the OpenEMS REST Api</description>
+			</parameter>
+			<parameter name="password" type="text" required="true">
+				<context>password</context>
+				<label>Password</label>
+				<description>Password to access the OpenEMS REST Api</description>
+			</parameter>
+			<parameter name="refreshInterval" type="integer" unit="s" min="1">
+				<label>Refresh Interval</label>
+				<description>Interval the OpenEMS REST Api is polled in sec.</description>
+				<default>60</default>
+				<advanced>true</advanced>
+			</parameter>
+		</config-description>
+	</thing-type>
+
+	<!-- Sample Channel Type -->
+	<channel-type id="sum-State">
+		<item-type>Number</item-type>
+		<label>Zustand des Systems</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Zustand des Systems (0: Ok, 1:Info, 2:Warning, 3:Fault)</description>
+	</channel-type>
+	<channel-type id="sum-GridMode">
+		<item-type>Number</item-type>
+		<label>Grid Mode</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Grid mode -1: Undefined, 1:On-Grid, 2:Off-Grid)</description>
+	</channel-type>
+	<channel-type id="sum-EssSoc">
+		<item-type>Number:Dimensionless</item-type>
+		<label>Ladezustand des Speichers</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Ladezustand des Speichers in %</description>
+	</channel-type>
+	<channel-type id="sum-EssActivePower">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung des Speichers</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung des Speichers in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-EssActivePowerL1">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Phase 1 Speichers</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung Phase 1 Speichers in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-EssActivePowerL2">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Phase 2 Speichers</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung Phase 2 Speichers in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-EssActivePowerL3">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Phase 3 Speichers</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung Phase 3 Speichers in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-GridActivePower">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Netzanschlusspunkt</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung am Netzanschlusspunkt in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-GridActivePowerL1">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Phase 1 Netz</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung Phase 1 Netz in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-GridActivePowerL2">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Phase 2 Netz</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung Phase 2 Netz in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-GridActivePowerL3">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Phase 3 Netz</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung Phase 3 Netz in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-ProductionActivePower">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Erzeuger</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung Erzeuger in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-ProductionDcActualPower">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung DC Erzeuger</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung DC Erzeuger in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-ConsumptionActivePower">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Verbraucher</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung Verbraucher in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-ConsumptionActivePowerL1">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Phase 1 Verbraucher</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung Phase 1 Verbraucher in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-ConsumptionActivePowerL2">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Phase 2 Verbraucher</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung Phase 2 Verbraucher in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-ConsumptionActivePowerL3">
+		<item-type>Number:Power</item-type>
+		<label>Wirkleistung Phase 3 Verbraucher</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Wirkleistung Phase 3 Verbraucher in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-EssActiveChargeEnergy">
+		<item-type>Number:Energy</item-type>
+		<label>Energie Speicherbeladung</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Energie Speicherbeladung in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="sum-EssActiveDischargeEnergy">
+		<item-type>Number:Energy</item-type>
+		<label>Energie Speicherentladung</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Energie Speicherentladung in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="sum-GridBuyActiveEnergy">
+		<item-type>Number:Energy</item-type>
+		<label>Energie Netzbezug</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Energie Netzbezug in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="sum-GridSellActiveEnergy">
+		<item-type>Number:Energy</item-type>
+		<label>Energie Netzeinspeisung</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Energie Netzeinspeisung in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="sum-ProductionActiveEnergy">
+		<item-type>Number:Energy</item-type>
+		<label>Energie Erzeugung</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Energie Erzeugung in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="sum-ProductionDcActiveEnergy">
+		<item-type>Number:Energy</item-type>
+		<label>Energie DC Erzeugung</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Energie DC Erzeugung in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="sum-ConsumptionActiveEnergy">
+		<item-type>Number:Energy</item-type>
+		<label>Energie Verbraucher</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Energie Verbraucher in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="sum-EssDcChargeEnergy">
+		<item-type>Number:Energy</item-type>
+		<label>Beladeenergie Batterie</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Beladeenergie der Batterie in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="sum-EssDcDischargeEnergy">
+		<item-type>Number:Energy</item-type>
+		<label>Entladeenergie Batterie</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Entladeenergie der Batterie in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="sum-EssMaxApparentPower">
+		<item-type>Number:Power</item-type>
+		<label>Anschlussleistung Batterie</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Anschlussleistung der Batterie in Volt-Ampere[VA]</description>
+	</channel-type>
+	<channel-type id="sum-GridMaxActivePower">
+		<item-type>Number:Power</item-type>
+		<label>Max Leistung Netzanschlusspunkt</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Maximalie Leistung am Netzanschlusspunkt in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-GridMinActivePower">
+		<item-type>Number:Power</item-type>
+		<label>Min Leistung Netzanschlusspunkt</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Minimal Leistung am Netzanschlusspunkt in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-EssCapacity">
+		<item-type>Number:Energy</item-type>
+		<label>Kapazität Batterie</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Kapazität der Batterie in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="sum-ConsumptionMaxActivePower">
+		<item-type>Number:Power</item-type>
+		<label>Max Verbrauchsleistung</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Maximale Verbrauchsleistung in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-EssReactivePower">
+		<item-type>Number:Power</item-type>
+		<label>Reactive Power Batterie</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Reactive Power Batterie in Volt-Ampere Reactive[var]</description>
+	</channel-type>
+	<channel-type id="sum-ProductionMaxDcActualPower">
+		<item-type>Number:Power</item-type>
+		<label>Max Erzeugte Leistung DC</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Maximal erzeugte Gleichstrom Leistung in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-EssDischargePower">
+		<item-type>Number:Power</item-type>
+		<label>Entladeleistung Batterie</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Entladeleistung der Batterie in Watt[W]</description>
+	</channel-type>
+	<channel-type id="sum-ProductionMaxActivePower">
+		<item-type>Number:Power</item-type>
+		<label>Max Erzeugte Leistung</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Maximal erzeugte Leistung in Watt[W]</description>
+	</channel-type>
+	<channel-type id="charger0-ActualEnergy">
+		<item-type>Number:Energy</item-type>
+		<label>Erzeugte Energie</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Erzeugte Energie in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="charger1-ActualEnergy">
+		<item-type>Number:Energy</item-type>
+		<label>Erzeugte Energie</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Erzeugte Energie in WattHours[Wh]</description>
+	</channel-type>
+	<channel-type id="meta-Version">
+		<item-type>String</item-type>
+		<label>Versionsnummer</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<description>Versionsnummer</description>
+	</channel-type>
+</thing:thing-descriptions>

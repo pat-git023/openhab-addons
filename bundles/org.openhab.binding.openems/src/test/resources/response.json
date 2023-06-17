@@ -1,0 +1,74 @@
+[
+  {
+    "address": "_sum/_PropertyCycleTime",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "",
+    "value": 1000
+  },
+  {
+    "address": "_sum/GridSellActiveEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": 2493847
+  },
+  {
+    "address": "_sum/EssMaxApparentPower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "VA",
+    "value": 10000
+  },
+  {
+    "address": "_sum/ConsumptionActivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "W",
+    "value": 526
+  },
+  {
+    "address": "_sum/EssSoc",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "Range 0..100",
+    "unit": "%",
+    "value": 100
+  },
+  {
+    "address": "_sum/State",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "0:Ok, 1:Info, 2:Warning, 3:Fault",
+    "unit": "",
+    "value": 0
+  },
+  {
+    "address": "_sum/EssReactivePower",
+    "type": "INTEGER",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "var",
+    "value": 0
+  },
+  {
+    "address": "_sum/_PropertyNetworkConfiguration",
+    "type": "STRING",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "",
+    "value": null
+  },
+  {
+    "address": "_sum/ProductionAcActiveEnergy",
+    "type": "LONG",
+    "accessMode": "RO",
+    "text": "",
+    "unit": "Wh",
+    "value": null
+  }
+]
