@@ -92,4 +92,3 @@ public class OpenEMSData {
         return Objects.hash(address, type, accessMode, text, unit, value);
     }
 }
-

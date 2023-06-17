@@ -1,5 +1,14 @@
 package org.openhab.binding.openems.internal;
 
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -15,16 +24,6 @@ import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.binding.ThingHandler;
 import org.openhab.core.thing.binding.ThingHandlerCallback;
 import org.openhab.core.types.RefreshType;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class OpenEMSHandlerTest {
@@ -80,10 +79,8 @@ public class OpenEMSHandlerTest {
         try (InputStream response = new FileInputStream("src/test/resources/response.json")) {
             lenient().when(connection.getInputStream()).thenReturn(response);
             handler.handleCommand(channelUID, RefreshType.REFRESH);
-            verify(callbackMock).stateUpdated(eq(channelUID),
-                    argThat(arg -> arg.toString().equals("yeah")));
+            verify(callbackMock).stateUpdated(eq(channelUID), argThat(arg -> arg.toString().equals("yeah")));
         }
         Assertions.assertTrue(true);
     }
-
 }

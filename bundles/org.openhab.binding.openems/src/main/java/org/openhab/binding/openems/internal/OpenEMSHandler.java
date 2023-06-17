@@ -14,8 +14,18 @@ package org.openhab.binding.openems.internal;
 
 import static org.openhab.binding.openems.internal.OpenEMSBindingConstants.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.library.types.DecimalType;
@@ -32,17 +42,7 @@ import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.google.gson.Gson;
 
 /**
  * The {@link OpenEMSHandler} is responsible for handling commands, which are
@@ -137,8 +137,19 @@ public class OpenEMSHandler extends BaseThingHandler {
 
                     state = new DecimalType(dataValue.getValue());
                 }
-                case SUM_ESS_SOC, SUM_ESS_ACTIVE_POWER_L1, SUM_ESS_ACTIVE_POWER_L2, SUM_ESS_ACTIVE_POWER_L3, SUM_GRID_ACTIVE_POWER, SUM_GRID_ACTIVE_POWER_L1, SUM_GRID_ACTIVE_POWER_L2, SUM_GRID_ACTIVE_POWER_L3, SUM_PRODUCTION_ACTIVE_POWER, SUM_PRODUCTION_DC_ACTUAL_POWER, SUM_CONSUMPTION_ACTIVE_POWER, SUM_CONSUMPTION_ACTIVE_POWER_L1, SUM_CONSUMPTION_ACTIVE_POWER_L2, SUM_CONSUMPTION_ACTIVE_POWER_L3, SUM_ESS_ACTIVE_POWER, SUM_ESS_ACTIVE_CHARGE_ENERGY, SUM_ESS_ACTIVE_DISCHARGE_ENERGY, SUM_GRID_BUY_ACTIVE_ENERGY, SUM_GRID_SELL_ACTIVE_ENERGY, SUM_PRODUCTION_AC_ACTIVE_ENERGY, SUM_PRODUCTION_DC_ACTIVE_ENERGY, SUM_CONSUMPTION_ACTIVE_ENERGY, SUM_ESS_APPARENT_POWER, SUM_GRID_MAX_ACTIVE_POWER, SUM_ESS_CAPACITY, SUM_CONSUMPTION_MAX_ACTIVE_POWER, SUM_GRID_MIN_ACTIVE_POWER, SUM_ESS_DC_DISCHARGE_ENERGY, SUM_PRODUCTION_MAX_DC_ACTUAL_POWER, SUM_ESS_DISCHARGE_POWER, SUM_ESS_DC_CHARGE_ENERGY, SUM_PRODUCTION_MAX_ACTIVE_POWER, CHARGER0_ACTUAL_ENERGY, CHARGER1_ACTUAL_ENERGY, SUM_PRODUCTION_ACTIVE_ENERGY ->
-                        state = new QuantityType<>(String.format("%s %s", dataValue.getValue(), dataValue.getUnit()));
+                case SUM_ESS_SOC, SUM_ESS_ACTIVE_POWER_L1, SUM_ESS_ACTIVE_POWER_L2, SUM_ESS_ACTIVE_POWER_L3,
+                        SUM_GRID_ACTIVE_POWER, SUM_GRID_ACTIVE_POWER_L1, SUM_GRID_ACTIVE_POWER_L2,
+                        SUM_GRID_ACTIVE_POWER_L3, SUM_PRODUCTION_ACTIVE_POWER, SUM_PRODUCTION_DC_ACTUAL_POWER,
+                        SUM_CONSUMPTION_ACTIVE_POWER, SUM_CONSUMPTION_ACTIVE_POWER_L1, SUM_CONSUMPTION_ACTIVE_POWER_L2,
+                        SUM_CONSUMPTION_ACTIVE_POWER_L3, SUM_ESS_ACTIVE_POWER, SUM_ESS_ACTIVE_CHARGE_ENERGY,
+                        SUM_ESS_ACTIVE_DISCHARGE_ENERGY, SUM_GRID_BUY_ACTIVE_ENERGY, SUM_GRID_SELL_ACTIVE_ENERGY,
+                        SUM_PRODUCTION_AC_ACTIVE_ENERGY, SUM_PRODUCTION_DC_ACTIVE_ENERGY, SUM_CONSUMPTION_ACTIVE_ENERGY,
+                        SUM_ESS_APPARENT_POWER, SUM_GRID_MAX_ACTIVE_POWER, SUM_ESS_CAPACITY,
+                        SUM_CONSUMPTION_MAX_ACTIVE_POWER, SUM_GRID_MIN_ACTIVE_POWER, SUM_ESS_DC_DISCHARGE_ENERGY,
+                        SUM_PRODUCTION_MAX_DC_ACTUAL_POWER, SUM_ESS_DISCHARGE_POWER, SUM_ESS_DC_CHARGE_ENERGY,
+                        SUM_PRODUCTION_MAX_ACTIVE_POWER, CHARGER0_ACTUAL_ENERGY, CHARGER1_ACTUAL_ENERGY,
+                        SUM_PRODUCTION_ACTIVE_ENERGY ->
+                    state = new QuantityType<>(String.format("%s %s", dataValue.getValue(), dataValue.getUnit()));
                 default -> logger.debug("Unknown channel: {}", channelID);
             }
             if (state != null) {
@@ -209,12 +220,12 @@ public class OpenEMSHandler extends BaseThingHandler {
     public OpenEMSData[] parseDataFromStream(InputStream stream) {
         OpenEMSData[] data = null;
         try {
-            data =  new Gson().fromJson(new InputStreamReader(stream), OpenEMSData[].class);
+            data = new Gson().fromJson(new InputStreamReader(stream), OpenEMSData[].class);
         } catch (Exception e) {
             logger.warn("Could not read json", e);
         }
 
-        return data!=null? data : new OpenEMSData[]{};
+        return data != null ? data : new OpenEMSData[] {};
     }
 
     public String parseAddressToChannelId(String address) {
