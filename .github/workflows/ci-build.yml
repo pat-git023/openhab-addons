@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'feat/*'
     paths-ignore:
       - '.github/**/*.md'
   pull_request:
