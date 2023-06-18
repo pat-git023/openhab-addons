@@ -3,7 +3,7 @@
 BUILD_LOG=build.log
 
 #ARGUMENTS="clean verify -B -T 1.5C -U"
-ARGUMENTS="verify -B -T 1.5C -U"
+ARGUMENTS="verify -B -T 1.5C -U -pl :org.openhab.binding.openems"
 if [ $# -ge 1 ]; then
     ARGUMENTS=$@
 fi
