@@ -45,6 +45,7 @@ public class OpenEMSHandlerTest {
     @BeforeEach
     public void setUp() {
 
+        reset(callbackMock);
         handler = new OpenEMSHandler(thingMock);
         handler.setCallback(callbackMock);
     }
@@ -70,15 +71,19 @@ public class OpenEMSHandlerTest {
 
     @Test
     public void test() throws Exception {
+        clearInvocations(callbackMock);
         Mockito.mockConstruction(URL.class, (mock, context) -> {
             lenient().when(mock.openConnection()).thenReturn(connection);
         });
         when(channelUID.getId()).thenReturn("sum-GridActivePower");
-        when(callbackMock.isChannelLinked(any())).thenReturn(true);
+        when(callbackMock.isChannelLinked(channelUID)).thenReturn(true);
 
         try (InputStream response = new FileInputStream("src/test/resources/response.json")) {
             lenient().when(connection.getInputStream()).thenReturn(response);
             handler.handleCommand(channelUID, RefreshType.REFRESH);
+
+            verify(callbackMock).statusUpdated(eq(thingMock),
+                    argThat(arg -> arg.getStatus().equals(ThingStatus.ONLINE)));
             verify(callbackMock).stateUpdated(eq(channelUID), argThat(arg -> arg.toString().equals("yeah")));
         }
         Assertions.assertTrue(true);

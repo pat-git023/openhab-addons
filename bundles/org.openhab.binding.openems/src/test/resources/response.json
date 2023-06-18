@@ -24,7 +24,7 @@
     "value": 10000
   },
   {
-    "address": "_sum/ConsumptionActivePower",
+    "address": "sum-GridActivePower",
     "type": "INTEGER",
     "accessMode": "RO",
     "text": "",
