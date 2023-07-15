@@ -12,20 +12,7 @@
  */
 package org.openhab.binding.openems.internal;
 
-import static org.openhab.binding.openems.internal.OpenEMSBindingConstants.*;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import com.google.gson.Gson;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.library.types.DecimalType;
@@ -42,7 +29,19 @@ import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.openhab.binding.openems.internal.OpenEMSBindingConstants.*;
 
 /**
  * The {@link OpenEMSHandler} is responsible for handling commands, which are
@@ -218,10 +217,11 @@ public class OpenEMSHandler extends BaseThingHandler {
     }
 
     public OpenEMSData[] parseDataFromStream(InputStream stream) {
+        Objects.requireNonNull(stream);
         OpenEMSData[] data = null;
         try {
             data = new Gson().fromJson(new InputStreamReader(stream), OpenEMSData[].class);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.warn("Could not read json", e);
         }
 

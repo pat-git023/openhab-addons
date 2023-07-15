@@ -21,5 +21,23 @@
       <version>5.3.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>javax.measure</groupId>
+      <artifactId>unit-api</artifactId>
+      <version>2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>si.uom</groupId>
+      <artifactId>si-units</artifactId>
+      <version>2.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>tech.units</groupId>
+      <artifactId>indriya</artifactId>
+      <version>2.1.4</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
