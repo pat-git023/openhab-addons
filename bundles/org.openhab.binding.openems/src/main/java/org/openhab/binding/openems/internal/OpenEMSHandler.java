@@ -98,10 +98,11 @@ public class OpenEMSHandler extends BaseThingHandler {
 
     private void startAutomaticRefresh() {
         refreshTask = scheduler.scheduleWithFixedDelay(this::refreshState, 0, refreshTime, TimeUnit.SECONDS);
-        logger.debug("Start automatic refresh at {} minutes!", refreshTime);
+        logger.debug("Start automatic refresh at {} seconds!", refreshTime);
     }
 
     private void refreshState() {
+        logger.debug("Refresh data");
         HashMap<String, OpenEMSData> data = fetchData();
         boolean dataUpdated = updateDataIfChanged(data);
         if (dataUpdated) {
