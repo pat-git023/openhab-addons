@@ -149,7 +149,8 @@ public class OpenEMSHandler extends BaseThingHandler {
                         SUM_PRODUCTION_MAX_DC_ACTUAL_POWER, SUM_ESS_DISCHARGE_POWER, SUM_ESS_DC_CHARGE_ENERGY,
                         SUM_PRODUCTION_MAX_ACTIVE_POWER, CHARGER0_ACTUAL_ENERGY, CHARGER1_ACTUAL_ENERGY,
                         SUM_PRODUCTION_ACTIVE_ENERGY ->
-                    state = new QuantityType<>(String.format("%s %s", dataValue.getValue(), dataValue.getUnit()));
+                    state = new QuantityType<>(String.format("%s %s", dataValue.getValue(),
+                            OpenEMSHelper.of().normalizeUnit(dataValue.getUnit())));
                 default -> logger.debug("Unknown channel: {}", channelID);
             }
             if (state != null) {
