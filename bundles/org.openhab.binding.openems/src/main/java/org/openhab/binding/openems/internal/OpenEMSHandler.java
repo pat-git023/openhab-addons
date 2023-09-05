@@ -175,7 +175,8 @@ public class OpenEMSHandler extends BaseThingHandler {
                 case CHARGER0_ACTUAL_ENERGY:
                 case CHARGER1_ACTUAL_ENERGY:
                 case SUM_PRODUCTION_ACTIVE_ENERGY:
-                    state = new QuantityType<>(String.format("%s %s", dataValue.getValue(), dataValue.getUnit()));
+                    state = new QuantityType<>(String.format("%s %s", dataValue.getValue(),
+                            OpenEMSHelper.of().normalizeUnits( dataValue.getUnit())));
                     break;
 
                 default:
