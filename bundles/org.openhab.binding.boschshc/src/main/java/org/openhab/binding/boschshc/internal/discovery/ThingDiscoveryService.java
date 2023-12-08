@@ -24,6 +24,7 @@ import org.openhab.binding.boschshc.internal.devices.BoschSHCBindingConstants;
 import org.openhab.binding.boschshc.internal.devices.bridge.BridgeHandler;
 import org.openhab.binding.boschshc.internal.devices.bridge.dto.Device;
 import org.openhab.binding.boschshc.internal.devices.bridge.dto.Room;
+import org.openhab.binding.boschshc.internal.devices.bridge.dto.UserDefinedState;
 import org.openhab.core.config.discovery.AbstractDiscoveryService;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;
 import org.openhab.core.thing.ThingTypeUID;
@@ -164,6 +165,8 @@ public class ThingDiscoveryService extends AbstractDiscoveryService implements T
         logger.debug("SHC has {} rooms", rooms.size());
         List<Device> devices = shcBridgeHandler.getDevices();
         logger.debug("SHC has {} devices", devices.size());
+        List<UserDefinedState> userStates = shcBridgeHandler.getUserStates();
+        logger.debug("SHC has {} user-defined states", userStates.size());
 
         // Write found devices into openhab.log to support manual configuration
         for (Device d : devices) {
@@ -174,8 +177,50 @@ public class ThingDiscoveryService extends AbstractDiscoveryService implements T
                 }
             }
         }
+        for (UserDefinedState userState : userStates) {
+            logger.debug("Found user-defined state: name={} id={} state={}", userState.name, userState.id,
+                    userState.state);
+        }
 
         addDevices(devices, rooms);
+        addUserStates(userStates);
+    }
+
+    private void addUserStates(List<UserDefinedState> userStates) {
+        for (UserDefinedState userState : userStates) {
+            addUserState(userState);
+        }
+    }
+
+    private void addUserState(UserDefinedState userState) {
+        // see startScan for the runtime null check of shcBridgeHandler
+        assert shcBridgeHandler != null;
+
+        logger.trace("Discovering user-defined state {}", userState.name);
+        logger.trace("- details: id {}, state {}", userState.id, userState.state);
+
+        ThingTypeUID thingTypeUID = new ThingTypeUID(BoschSHCBindingConstants.BINDING_ID,
+                BoschSHCBindingConstants.THING_TYPE_USER_DEFINED_STATE.getId());
+        if (thingTypeUID == null) {
+            return;
+        }
+
+        logger.trace("- got thingTypeID '{}' for user-defined state '{}'", thingTypeUID.getId(), userState.name);
+
+        ThingUID thingUID = new ThingUID(thingTypeUID, shcBridgeHandler.getThing().getUID(),
+                userState.id.replace(':', '_'));
+
+        logger.trace("- got thingUID '{}' for user-defined state: '{}'", thingUID, userState);
+
+        DiscoveryResultBuilder discoveryResult = DiscoveryResultBuilder.create(thingUID).withThingType(thingTypeUID)
+                .withProperty("id", userState.id).withLabel(userState.name);
+        if (null != shcBridgeHandler) {
+            discoveryResult.withBridge(shcBridgeHandler.getThing().getUID());
+        }
+        thingDiscovered(discoveryResult.build());
+
+        logger.debug("Discovered user-defined state '{}' with thingTypeUID={}, thingUID={}, id={}, state={}", userState.name,
+                thingUID, thingTypeUID, userState.id, userState.state);
     }
 
     protected void addDevices(List<Device> devices, List<Room> rooms) {

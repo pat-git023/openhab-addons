@@ -41,6 +41,7 @@ import org.openhab.binding.boschshc.internal.devices.bridge.dto.DeviceServiceDat
 import org.openhab.binding.boschshc.internal.devices.bridge.dto.LongPollResult;
 import org.openhab.binding.boschshc.internal.devices.bridge.dto.Room;
 import org.openhab.binding.boschshc.internal.devices.bridge.dto.Scenario;
+import org.openhab.binding.boschshc.internal.devices.bridge.dto.UserDefinedState;
 import org.openhab.binding.boschshc.internal.discovery.ThingDiscoveryService;
 import org.openhab.binding.boschshc.internal.exceptions.BoschSHCException;
 import org.openhab.binding.boschshc.internal.exceptions.LongPollingFailedException;
@@ -357,6 +358,39 @@ public class BridgeHandler extends BaseBridgeHandler {
         }
     }
 
+    public List<UserDefinedState> getUserStates() throws InterruptedException {
+        @Nullable
+        BoschHttpClient httpClient = this.httpClient;
+        if (httpClient == null) {
+            return Collections.emptyList();
+        }
+
+        try {
+            logger.trace("Sending http request to Bosch to request user-defined states: {}", httpClient);
+            String url = httpClient.getBoschSmartHomeUrl("userdefinedstates");
+            ContentResponse contentResponse = httpClient.createRequest(url, GET).send();
+
+            // check HTTP status code
+            if (!HttpStatus.getCode(contentResponse.getStatus()).isSuccess()) {
+                logger.debug("Request devices failed with status code: {}", contentResponse.getStatus());
+                return Collections.emptyList();
+            }
+
+            String content = contentResponse.getContentAsString();
+            logger.trace("Request devices completed with success: {} - status code: {}", content,
+                    contentResponse.getStatus());
+
+            Type collectionType = new TypeToken<ArrayList<UserDefinedState>>() {
+            }.getType();
+            List<UserDefinedState> nullableUserStates = GsonUtils.DEFAULT_GSON_INSTANCE.fromJson(content,
+                    collectionType);
+            return Optional.ofNullable(nullableUserStates).orElse(Collections.emptyList());
+        } catch (TimeoutException | ExecutionException e) {
+            logger.debug("Request user-defined states failed because of {}!", e.getMessage(), e);
+            return Collections.emptyList();
+        }
+    }
+
     /**
      * Get a list of rooms from the Smart-Home controller
      *
@@ -426,6 +460,8 @@ public class BridgeHandler extends BaseBridgeHandler {
         for (BoschSHCServiceState serviceState : result.result) {
             if (serviceState instanceof DeviceServiceData deviceServiceData) {
                 handleDeviceServiceData(deviceServiceData);
+            } else if (serviceState instanceof UserDefinedState userDefinedState) {
+                handleUserDefinedState(userDefinedState);
             } else if (serviceState instanceof Scenario scenario) {
                 final Channel channel = this.getThing().getChannel(BoschSHCBindingConstants.CHANNEL_SCENARIO_TRIGGERED);
                 if (channel != null && isLinked(channel.getUID())) {
@@ -458,6 +494,24 @@ public class BridgeHandler extends BaseBridgeHandler {
         }
     }
 
+    private void handleUserDefinedState(@Nullable UserDefinedState userDefinedState) {
+        if (userDefinedState != null) {
+            JsonElement state = GsonUtils.DEFAULT_GSON_INSTANCE.toJsonTree(userDefinedState.state);
+
+            logger.debug("Got update for user-defined state {} with id {}: {}", userDefinedState.name,
+                    userDefinedState.id, state);
+
+            var stateId = userDefinedState.id;
+            if (stateId == null || state == null) {
+                return;
+            }
+
+            logger.debug("Got update for user-defined state {}", userDefinedState);
+
+            forwardStateToHandlers(userDefinedState, state, stateId);
+        }
+    }
+
     /**
      * Extracts the actual state object from the given {@link DeviceServiceData} instance.
      * <p>
@@ -482,12 +536,18 @@ public class BridgeHandler extends BaseBridgeHandler {
     /**
      * Tries to find handlers for the device with the given ID and forwards the received state to the handlers.
      *
-     * @param deviceServiceData object representing updates received in long poll results
+     * @param serviceData object representing updates received in long poll results
      * @param state the received state object as JSON element
      * @param updateDeviceId the ID of the device for which the state update was received
      */
-    private void forwardStateToHandlers(DeviceServiceData deviceServiceData, JsonElement state, String updateDeviceId) {
+    private void forwardStateToHandlers(BoschSHCServiceState serviceData, JsonElement state, String updateDeviceId) {
         boolean handled = false;
+        final String serviceId;
+        if (serviceData instanceof UserDefinedState) {
+            serviceId = ((UserDefinedState) serviceData).id;
+        } else {
+            serviceId = ((DeviceServiceData) serviceData).id;
+        }
 
         Bridge bridge = this.getThing();
         for (Thing childThing : bridge.getThings()) {
@@ -502,9 +562,8 @@ public class BridgeHandler extends BaseBridgeHandler {
                 logger.debug("Registered device: {} - looking for {}", deviceId, updateDeviceId);
 
                 if (deviceId != null && updateDeviceId.equals(deviceId)) {
-                    logger.debug("Found child: {} - calling processUpdate (id: {}) with {}", handler,
-                            deviceServiceData.id, state);
-                    handler.processUpdate(deviceServiceData.id, state);
+                    logger.debug("Found child: {} - calling processUpdate (id: {}) with {}", handler, serviceId, state);
+                    handler.processUpdate(serviceId, state);
                 }
             } else {
                 logger.warn("longPoll: child handler for {} does not implement Bosch SHC handler", baseHandler);
@@ -567,6 +626,37 @@ public class BridgeHandler extends BaseBridgeHandler {
         });
     }
 
+    public UserDefinedState getUserStateInfo(String stateId)
+            throws BoschSHCException, InterruptedException, TimeoutException, ExecutionException {
+        @Nullable
+        BoschHttpClient httpClient = this.httpClient;
+        if (httpClient == null) {
+            throw new BoschSHCException("HTTP client not initialized");
+        }
+
+        String url = httpClient.getBoschSmartHomeUrl(String.format("userdefinedstates/%s", stateId));
+        Request request = httpClient.createRequest(url, GET);
+
+        return httpClient.sendRequest(request, UserDefinedState.class, UserDefinedState::isValid,
+                (Integer statusCode, String content) -> {
+                    JsonRestExceptionResponse errorResponse = GsonUtils.DEFAULT_GSON_INSTANCE.fromJson(content,
+                            JsonRestExceptionResponse.class);
+                    if (errorResponse != null && JsonRestExceptionResponse.isValid(errorResponse)) {
+                        if (errorResponse.errorCode.equals(JsonRestExceptionResponse.ENTITY_NOT_FOUND)) {
+                            return new BoschSHCException("@text/offline.conf-error.invalid-state-id");
+                        } else {
+                            return new BoschSHCException(String.format(
+                                    "Request for info of user-defines state %s failed with status code %d and error code %s",
+                                    stateId, errorResponse.statusCode, errorResponse.errorCode));
+                        }
+                    } else {
+                        return new BoschSHCException(
+                                String.format("Request for info of user-defined state %s failed with status code %d",
+                                        stateId, statusCode));
+                    }
+                });
+    }
+
     /**
      * Query the Bosch Smart Home Controller for the state of the given device.
      * <p>
@@ -594,7 +684,7 @@ public class BridgeHandler extends BaseBridgeHandler {
             return null;
         }
 
-        String url = httpClient.getServiceStateUrl(stateName, deviceId);
+        String url = httpClient.getServiceStateUrl(stateName, deviceId, stateClass);
         logger.debug("getState(): Requesting \"{}\" from Bosch: {} via {}", stateName, deviceId, url);
         return getState(httpClient, url, stateClass);
     }
@@ -691,7 +781,7 @@ public class BridgeHandler extends BaseBridgeHandler {
         }
 
         // Create request
-        String url = httpClient.getServiceStateUrl(serviceName, deviceId);
+        String url = httpClient.getServiceStateUrl(serviceName, deviceId, state.getClass());
         Request request = httpClient.createRequest(url, PUT, state);
 
         // Send request

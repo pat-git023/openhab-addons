@@ -14,6 +14,7 @@ package org.openhab.binding.boschshc.internal.services.dto;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.boschshc.internal.serialization.GsonUtils;
+import org.openhab.binding.boschshc.internal.services.userstate.dto.UserStateServiceState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +63,11 @@ public class BoschSHCServiceState {
 
     public static <TState extends BoschSHCServiceState> @Nullable TState fromJson(String json,
             Class<TState> stateClass) {
+        if (stateClass.isAssignableFrom(UserStateServiceState.class)) {
+            var state = new UserStateServiceState();
+            state.state = Boolean.parseBoolean(json);
+            return (TState) state;
+        }
         var state = GsonUtils.DEFAULT_GSON_INSTANCE.fromJson(json, stateClass);
         if (state == null || !state.isValid()) {
             return null;
@@ -72,6 +78,11 @@ public class BoschSHCServiceState {
 
     public static <TState extends BoschSHCServiceState> @Nullable TState fromJson(JsonElement json,
             Class<TState> stateClass) {
+        if (stateClass.isAssignableFrom(UserStateServiceState.class)) {
+            var state = new UserStateServiceState();
+            state.state = Boolean.parseBoolean(json.getAsString());
+            return (TState) state;
+        }
         var state = GsonUtils.DEFAULT_GSON_INSTANCE.fromJson(json, stateClass);
         if (state == null || !state.isValid()) {
             return null;
